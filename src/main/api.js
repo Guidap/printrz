@@ -1,13 +1,17 @@
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const logger = require('morgan')
 const printer = require('printer')
 const port = 5000
 
 export default function (callback) {
   const server = express()
   server.use(cors())
-  server.use(bodyParser())
+  server.use(bodyParser.json())
+  server.use(logger('short', {
+    skip: function (req, res) { return res.statusCode < 400 }
+  }))
   /**
    * Check if the server is running
    */
