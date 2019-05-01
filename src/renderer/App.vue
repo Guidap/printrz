@@ -21,11 +21,13 @@
             <span class="md-list-item-text">Jobs</span>
           </md-list-item>
 
-          <md-list-item to="/settings">
+          <!-- <md-list-item to="/settings">
             <md-icon>settings</md-icon>
             <span class="md-list-item-text">Settings</span>
-          </md-list-item>
+          </md-list-item> -->
         </md-list>
+
+        <p class="made-with-love">Made with <span class="heart">❤</span> by GUIDAP</p>
       </md-app-drawer>
       
       <md-app-content>
@@ -77,5 +79,19 @@
   
   .md-content.md-app-content {
     background-color: #fafafa;
+  }
+
+  .made-with-love {
+    text-align: center;
+    font-weight: 600;
+    .heart {
+      color: #f44336;
+      transition: .3s cubic-bezier(.4,0,.2,1);
+      &:hover {
+        -webkit-transform: scale(1.4);
+        transform: scale(1.4);
+        color: #d32f2f;
+      }
+    }
   }
 </style>
