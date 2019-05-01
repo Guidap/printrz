@@ -1,6 +1,13 @@
 <template>
   <div>
-    <md-card v-for="pr in printers" :key="pr.name">
+    <md-empty-state
+      v-if="printers.length === 0"
+      md-rounded
+      md-icon="print"
+      md-label="No printer configured"
+      md-description="You must configure at least one printer on your computer.">
+    </md-empty-state>
+    <md-card v-else v-for="pr in printers" :key="pr.name">
       <md-card-header>
         <md-card-media>
           <md-icon class="md-size-3x">print</md-icon>
@@ -39,12 +46,13 @@
 <script>
   import Vue from 'vue'
   import axios from 'axios'
-  import { MdCard, MdButton, MdDialog } from 'vue-material/dist/components'
+  import { MdCard, MdButton, MdDialog, MdEmptyState } from 'vue-material/dist/components'
   // import Api from '&/api.js'
 
   Vue.use(MdCard)
   Vue.use(MdButton)
   Vue.use(MdDialog)
+  Vue.use(MdEmptyState)
 
   export default {
     name: 'home',

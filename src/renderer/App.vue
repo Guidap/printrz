@@ -23,6 +23,7 @@
         </md-list>
 
         <p class="made-with-love">Made with <span class="heart">❤</span> by GUIDAP</p>
+        <p>v{{ $electron.remote.app.getVersion() }}</p>
       </md-app-drawer>
       
       <md-app-content>
@@ -76,8 +77,11 @@
     background-color: #fafafa;
   }
 
-  .made-with-love {
+  p {
     text-align: center;
+    margin-bottom: 0;
+  }
+  .made-with-love {
     font-weight: 600;
     .heart {
       color: #f44336;
