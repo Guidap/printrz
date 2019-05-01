@@ -16,11 +16,6 @@
             <span class="md-list-item-text">Printers</span>
           </md-list-item>
 
-          <md-list-item to="/jobs">
-            <md-icon>queue_play_next</md-icon>
-            <span class="md-list-item-text">Jobs</span>
-          </md-list-item>
-
           <!-- <md-list-item to="/settings">
             <md-icon>settings</md-icon>
             <span class="md-list-item-text">Settings</span>
