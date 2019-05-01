@@ -27,6 +27,13 @@
     "directories": {
       "output": "build"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "guidap",
+        "repo": "printrz"
+      }
+    ],
     "files": [
       "dist/electron/**/*"
     ],
@@ -58,6 +65,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "cors": "^2.8.5",
+    "electron-log": "^3.0.5",
+    "electron-updater": "^4.0.6",
     "express": "^4.16.4",
     "material-icons": "^0.3.1",
     "morgan": "^1.9.1",
@@ -86,7 +95,7 @@
     "css-loader": "^0.28.11",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^2.0.4",
+    "electron": "3",
     "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",
