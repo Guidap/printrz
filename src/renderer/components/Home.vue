@@ -7,7 +7,10 @@
         </md-card-media>
       
         <md-card-header-text>
-          <div class="md-title">{{ pr.options['printer-info'] }}</div>
+          <div class="md-title">
+            <template v-if="pr.options">{{ pr.options['printer-info'] }}</template>
+            <template v-else>{{ pr.name }}</template>
+          </div>
           <div class="md-subhead">{{ pr.name }}</div>
         </md-card-header-text>
       </md-card-header>

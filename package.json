@@ -18,8 +18,8 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "test": "npm run unit",
     "unit": "karma start test/unit/karma.conf.js",
-    "postinstall": "npm run lint:fix && ./node_modules/.bin/electron-rebuild",
-    "rebuild-electron": "electron-rebuild"
+    "postinstall": "npm run lint:fix && npm run rebuild-electron",
+    "rebuild-electron": "./node_modules/.bin/electron-rebuild"
   },
   "build": {
     "productName": "printrz",
