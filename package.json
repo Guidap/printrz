@@ -1,9 +1,9 @@
 {
   "name": "printrz",
   "version": "0.0.1",
-  "author": "Sylvain Marty <sylvain.martyg@gmail.com>",
+  "author": "Sylvain Marty <sylvain@guidap.co>",
   "description": "A bridge used to talk with printers using raw commands (esc/pos 100% compatible)",
-  "license": null,
+  "license": "SEE LICENSE IN LICENSE",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
@@ -23,7 +23,7 @@
   },
   "build": {
     "productName": "printrz",
-    "appId": "com.sylvainmarty.printrz",
+    "appId": "com.guidap.printrz",
     "directories": {
       "output": "build"
     },
