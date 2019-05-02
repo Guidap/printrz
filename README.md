@@ -44,7 +44,7 @@ This API expose some [node-printer](https://github.com/tojocky/node-printer) fea
 
 ---
 ## Contribute
-Follow the guidelines exposed in the [CONTRIBUTING file](https://github.com/Guidap/printrz/blob/master/CONTRIBUTING). 
+Follow the guidelines exposed in the [CONTRIBUTING file](https://github.com/Guidap/printrz/blob/master/CONTRIBUTING.md). 
 
 ## How to develop
 ### Prerequisites
