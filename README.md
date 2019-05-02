@@ -40,7 +40,7 @@ Open this [JSFiddle](https://jsfiddle.net/3pc1vna5/) and try yourself !
 | `/printers` | GET    |                                                                                                                                  | Get the list of installed printers.            |
 | `/job`      | POST   | `{ "printer": "printer-identifier", "type": "type: RAW, TEXT, PDF, JPEG, ...", "data": "command"}` | Print something on the desired printer.        |
 
-This API expose some [node-printer](https://github.com/tojocky/node-printer) features so if you don't find the information you need here, it could be usefull to check the document of this project 👍.
+This API expose some [node-printer](https://github.com/tojocky/node-printer) features so if you don't find the information you need here, it could be usefull to check the documentation of this project 👍.
 
 ---
 ## Contribute
