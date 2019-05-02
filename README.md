@@ -4,7 +4,6 @@
 
 > It was originally built to send raw ESC/POS commands to thermal printers from a web point of sale but this project can answer other purposes (see API doc for more).
 
----
 ## Introduction
 The initial purpose of this application was to send ESC/POS commands to thermal printers from a web app.
 Since the API implements the lovely (♥) [node-printer](https://github.com/tojocky/node-printer) project, the API can theorically be used to print PDF, JPG and whatsoever.
@@ -26,9 +25,7 @@ Currently, this app is used by GUIDAP's customers to print cash receipt from a d
 ### Roadmap to `v2`
 - [ ] Separate Electron app and API to different projects (the API could be useful as a standalone command line tool)
 
----
 ## How to use
-
 Install [the latest release](https://github.com/Guidap/printrz/releases/latest) of Printrz on your favorite operating system.
 
 Open this [JSFiddle](https://jsfiddle.net/3pc1vna5/) and try yourself !
@@ -42,7 +39,6 @@ Open this [JSFiddle](https://jsfiddle.net/3pc1vna5/) and try yourself !
 
 This API expose some [node-printer](https://github.com/tojocky/node-printer) features so if you don't find the information you need here, it could be usefull to check the documentation of this project 👍.
 
----
 ## Contribute
 Follow the guidelines exposed in the [CONTRIBUTING file](https://github.com/Guidap/printrz/blob/master/CONTRIBUTING.md). 
 
