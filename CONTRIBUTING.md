@@ -8,4 +8,4 @@ If you want to contribute right now, create an issue for the feature you seek.
 Feel free to open an issue to report a bug or to make a feature request.
 
 
-// TODO: improve following https://github.com/nayafia/contributing-template/blob/master/CONTRIBUTING-template.md
+// TODO: improve this file following https://github.com/nayafia/contributing-template/blob/master/CONTRIBUTING-template.md
