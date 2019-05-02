@@ -6,6 +6,10 @@
 
 ---
 ## Introduction
+The initial purpose of this application was to send ESC/POS commands to thermal printers from a web app.
+Since the API implements the lovely (♥) [node-printer](https://github.com/tojocky/node-printer) project, the API can theorically be used to print PDF, JPG and whatsoever.
+
+Currently, this app is used by GUIDAP's customers to print cash receipt from a desktop device.
 
 ### Roadmap to `v1`
 - [ ] Fix auto update and app certif signature
@@ -17,6 +21,7 @@
 - [ ] Add Letsencrypt certificates generation and renewal to encrypt API calls
 - [ ] Allow the user to override the default printer
 - [ ] Unit and fonctional testing
+- [ ] Create a fancy logo
 
 ### Roadmap to `v2`
 - [ ] Separate Electron app and API to different projects (the API could be useful as a standalone command line tool)
