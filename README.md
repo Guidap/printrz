@@ -1,28 +1,85 @@
-# printrz
+# Printrz
 
-> A bridge used talk with printers@[8fae476](https://github.com/SimulatedGREG/electron-vue/tree/8fae4763e9d225d3691b627e83b9e09b56f6c935) using raw commands (esc/pos 100% compatible)
+> Printrz is a bridge between web app and printers installed on the OS.
 
-#### Build Setup
+> It was originally built to send raw ESC/POS commands to thermal printers from a web point of sale but this project can answer other purposes (see API doc for more).
 
+## Introduction
+The initial purpose of this application was to send ESC/POS commands to thermal printers from a web app.
+Since the API implements the lovely (♥) [node-printer](https://github.com/tojocky/node-printer) project, the API can theorically be used to print PDF, JPG and whatsoever.
+
+Currently, this app is used by GUIDAP's customers to print cash receipt from a desktop device.
+
+### Roadmap to `v1`
+- [ ] Fix auto update and app certif signature
+- [ ] Add "Reload printers" button
+- [ ] Show printer state and indicate the default printer of the OS
+- [ ] Server settings page (host, port)
+- [ ] Show local IP on server settings page
+- [ ] Add API Documentation page
+- [ ] Add Letsencrypt certificates generation and renewal to encrypt API calls
+- [ ] Allow the user to override the default printer
+- [ ] Unit and fonctional testing
+- [ ] Create a fancy logo
+
+### Roadmap to `v2`
+- [ ] Separate Electron app and API to different projects (the API could be useful as a standalone command line tool)
+
+## How to use
+Install [the latest release](https://github.com/Guidap/printrz/releases/latest) of Printrz on your favorite operating system.
+
+Open this [JSFiddle](https://jsfiddle.net/3pc1vna5/) and try yourself !
+
+### API :
+| Route       | Method | Body                                                                                                                             | Description                                    |
+|-------------|--------|----------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
+| `/`         | GET    |                                                                                                                                  | Server healthcheck endpoint. No more, no less. |
+| `/printers` | GET    |                                                                                                                                  | Get the list of installed printers.            |
+| `/job`      | POST   | `{ "printer": "printer-identifier", "type": "type: RAW, TEXT, PDF, JPEG, ...", "data": "command"}` | Print something on the desired printer.        |
+
+This API expose some [node-printer](https://github.com/tojocky/node-printer) features so if you don't find the information you need here, it could be usefull to check the documentation of this project 👍.
+
+## Contribute
+Follow the guidelines exposed in the [CONTRIBUTING file](https://github.com/Guidap/printrz/blob/master/CONTRIBUTING.md). 
+
+## How to develop
+### Prerequisites
+You have to install [Node (LTS)](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/fr/docs/install).
+
+#### Windows users
+Install [Python](https://www.python.org/downloads/windows/) (executable installer).
+
+Follow [this tutorial](https://projects.raspberrypi.org/en/projects/using-pip-on-windows/5) to know the Python executable path.
+
+Open the Node Prompt as administrator and run the following command :
+```bash
+$ set PYTHON=C:\Users\...\AppData\Local\Programs\Python\Python37\python.exe # Change with your own Path
+$ npm install --global --production windows-build-tools@4.0.0
+$ yarn config set msvs_version 2017
+$ set GYP_MSVS_VERSION=2017
+```
+
+### Build Setup
 ``` bash
 # install dependencies
-npm install
+$ yarn
 
 # serve with hot reload at localhost:9080
-npm run dev
+$ yarn run dev
 
 # build electron application for production
-npm run build
+$ yarn run build
 
 # run unit tests
-npm test
-
+$ yarn test
 
 # lint all JS/Vue component files in `src/`
-npm run lint
-
+$ yarn run lint
 ```
 
 ---
+## Special thanks
+
+To [@tojocky](https://github.com/tojocky) with his [node-printer](https://github.com/tojocky/node-printer) project ❤️.
 
 This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
