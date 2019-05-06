@@ -19,6 +19,7 @@ Currently, this app is used by GUIDAP's customers to print cash receipt from a d
 - [ ] Add API Documentation page
 - [ ] Add Letsencrypt certificates generation and renewal to encrypt API calls
 - [ ] Allow the user to override the default printer
+- [ ] Allow the user to chose the best print test between ESC/POS, JPG, PDF and lain text
 - [ ] Unit and fonctional testing
 - [ ] Create a fancy logo
 
