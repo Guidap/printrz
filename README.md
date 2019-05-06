@@ -12,7 +12,7 @@ Currently, this app is used by GUIDAP's customers to print cash receipt from a d
 
 ### Roadmap to `v1`
 - [ ] Fix auto update and app certif signature
-- [ ] Add "Reload printers" button
+- [ ] Add "Reload printers" button (#2)
 - [ ] Show printer state and indicate the default printer of the OS
 - [ ] Server settings page (host, port)
 - [ ] Show local IP on server settings page
