@@ -71,6 +71,7 @@
   .md-drawer {
     width: 230px;
     max-width: calc(100vw - 125px);
+    min-height: 100vh;
   }
   
   .md-content.md-app-content {
