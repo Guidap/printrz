@@ -12,14 +12,14 @@ Currently, this app is used by GUIDAP's customers to print cash receipt from a d
 
 ### Roadmap to `v1`
 - [ ] Fix auto update and app certif signature
-- [ ] Add "Reload printers" button ([#2](https://github.com/Guidap/printrz/issues/2))
+- [ ] Add "Reload printers" button ([#3](https://github.com/Guidap/printrz/issues/3))
 - [ ] Show printer state and indicate the default printer of the OS
 - [ ] Server settings page (host, port)
-- [ ] Show local IP on server settings page
+- [ ] Show local IP on server settings page ([#4](https://github.com/Guidap/printrz/issues/4))
 - [ ] Add API Documentation page
-- [ ] Add Letsencrypt certificates generation and renewal to encrypt API calls
+- [ ] Add self-signed certificates generation for HTTPS origin support
 - [ ] Allow the user to override the default printer
-- [ ] Allow the user to chose the best print test between ESC/POS, JPG, PDF and lain text
+- [ ] Allow the user to chose the best print test between ESC/POS, JPG, PDF and plain text
 - [ ] Unit and fonctional testing
 - [ ] Create a fancy logo
 
