@@ -7,7 +7,7 @@
       md-label="No printer configured"
       md-description="You must configure at least one printer on your computer.">
     </md-empty-state>
-    <md-card v-else v-for="pr in printers" :key="pr.name">
+    <md-card v-else v-for="pr in printers" :key="pr.name" md-with-hover>
       <md-card-header>
         <md-card-media>
           <md-icon class="md-size-3x">print</md-icon>
