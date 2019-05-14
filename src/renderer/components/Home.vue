@@ -15,7 +15,7 @@
           <md-icon>refresh</md-icon>
         </md-button>
       </md-subheader>
-      <md-card v-for="pr in printers" :key="pr.name">
+      <md-card v-for="pr in printers" :key="pr.name" md-with-hover>
         <md-card-header>
           <md-card-media>
             <md-icon class="md-size-3x">print</md-icon>

@@ -16,10 +16,10 @@
             <span class="md-list-item-text">Printers</span>
           </md-list-item>
 
-          <!-- <md-list-item to="/settings">
+          <md-list-item to="/settings">
             <md-icon>settings</md-icon>
             <span class="md-list-item-text">Settings</span>
-          </md-list-item> -->
+          </md-list-item>
         </md-list>
 
         <p class="made-with-love">Made with <span class="heart">❤</span> by GUIDAP</p>
@@ -71,6 +71,7 @@
   .md-drawer {
     width: 230px;
     max-width: calc(100vw - 125px);
+    min-height: 100vh;
   }
   
   .md-content.md-app-content {
