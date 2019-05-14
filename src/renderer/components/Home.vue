@@ -6,53 +6,62 @@
       md-icon="print"
       md-label="No printer configured"
       md-description="You must configure at least one printer on your computer.">
+      <md-button class="md-primary md-raised" @click="fetchPrinters">Refresh</md-button>
     </md-empty-state>
-    <md-card v-else v-for="pr in printers" :key="pr.name">
-      <md-card-header>
-        <md-card-media>
-          <md-icon class="md-size-3x">print</md-icon>
-        </md-card-media>
-      
-        <md-card-header-text>
-          <div class="md-title">
-            <template v-if="pr.options">{{ pr.options['printer-info'] }}</template>
-            <template v-else>{{ pr.name }}</template>
-          </div>
-          <div class="md-subhead">{{ pr.name }}</div>
-        </md-card-header-text>
-      </md-card-header>
 
-      <md-card-actions>
-        <md-button @click="showDetails(pr)">Details</md-button>
-        <md-button class="md-accent" @click="printTest(pr)">Print test</md-button>
-      </md-card-actions>
-    </md-card>
+    <template v-else>
+      <md-subheader>
+        <md-button @click="fetchPrinters" class="md-icon-button">
+          <md-icon>refresh</md-icon>
+        </md-button>
+      </md-subheader>
+      <md-card v-for="pr in printers" :key="pr.name">
+        <md-card-header>
+          <md-card-media>
+            <md-icon class="md-size-3x">print</md-icon>
+          </md-card-media>
+        
+          <md-card-header-text>
+            <div class="md-title">
+              <template v-if="pr.options">{{ pr.options['printer-info'] }}</template>
+              <template v-else>{{ pr.name }}</template>
+            </div>
+            <div class="md-subhead">{{ pr.name }}</div>
+          </md-card-header-text>
+        </md-card-header>
 
-    <md-dialog :md-active.sync="showDialog">
-      <md-dialog-title>Preferences</md-dialog-title>
+        <md-card-actions>
+          <md-button @click="showDetails(pr)">Details</md-button>
+          <md-button class="md-accent" @click="printTest(pr)">Print test</md-button>
+        </md-card-actions>
+      </md-card>
 
-      <md-dialog-content>
-        <pre>{{ printerDetails }}</pre>
-      </md-dialog-content>
+      <md-dialog :md-active.sync="showDialog">
+        <md-dialog-title>Preferences</md-dialog-title>
 
-      <md-dialog-actions>
-        <md-button class="md-primary" @click="showDialog = false">Close</md-button>
-      </md-dialog-actions>
-    </md-dialog>
-    <!-- <button @click="reload">Reload</button> -->
+        <md-dialog-content>
+          <pre>{{ printerDetails }}</pre>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-primary" @click="showDialog = false">Close</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+    </template>
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
   import axios from 'axios'
-  import { MdCard, MdButton, MdDialog, MdEmptyState } from 'vue-material/dist/components'
+  import { MdCard, MdButton, MdDialog, MdEmptyState, MdSubheader } from 'vue-material/dist/components'
   // import Api from '&/api.js'
 
   Vue.use(MdCard)
   Vue.use(MdButton)
   Vue.use(MdDialog)
   Vue.use(MdEmptyState)
+  Vue.use(MdSubheader)
 
   export default {
     name: 'home',
