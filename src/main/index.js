@@ -4,6 +4,9 @@ import { app, BrowserWindow } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import log from 'electron-log'
 import Api from './api'
+import { getConfiguration } from './configuration'
+
+app.commandLine.appendSwitch('ignore-certificate-errors')
 
 /**
  * Auto Updater
@@ -32,8 +35,10 @@ const winURL = process.env.NODE_ENV === 'development'
 function createWindow () {
   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdatesAndNotify()
 
+  let conf = getConfiguration(app.getPath('userData'), true)
   global.printrz = {
-    api: new Api()
+    configuration: conf,
+    api: new Api(conf)
   }
 
   /**

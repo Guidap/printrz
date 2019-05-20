@@ -53,9 +53,7 @@
 
 <script>
   import Vue from 'vue'
-  import axios from 'axios'
   import { MdCard, MdButton, MdDialog, MdEmptyState, MdSubheader } from 'vue-material/dist/components'
-  // import Api from '&/api.js'
 
   Vue.use(MdCard)
   Vue.use(MdButton)
@@ -79,7 +77,7 @@
 
     methods: {
       fetchPrinters () {
-        axios.get('http://localhost:5000/printers').then(response => {
+        this.$http.get('/printers').then(response => {
           this.printers = response.data
         })
       },
@@ -117,7 +115,7 @@
         cmds += newLine + newLine
         cmds += '11/03/13  19:53:17'
         cmds += newLine + newLine + newLine + newLine
-        axios.post('http://localhost:5000/job', {
+        this.$http.post('/job', {
           printer: printer.name,
           type: 'RAW',
           data: cmds
