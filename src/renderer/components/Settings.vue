@@ -8,7 +8,7 @@
       
         <md-card-header-text>
           <div class="md-title">
-            {{ ip }} &nbsp<md-button class="md-dense md-icon-button md-primary" @click="copyIp()"><md-icon>content_copy</md-icon></md-button>
+            {{ ip }} &nbsp;<md-button class="md-dense md-icon-button md-primary" @click="copyIp()"><md-icon>content_copy</md-icon></md-button>
           </div>
           <div class="md-subhead">Local IP</div>
         </md-card-header-text>
