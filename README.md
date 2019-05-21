@@ -15,7 +15,7 @@ Currently, this app is used by GUIDAP's customers to print cash receipt from a d
 - [ ] Sign app binaries
 - [x] Add "Reload printers" button ([#3](https://github.com/Guidap/printrz/issues/3))
 - [ ] Show printer state and indicate the default printer of the OS
-- [w] Server settings page (host, port) ([#6](https://github.com/Guidap/printrz/issues/5))
+- [x] Server settings page (host, port) ([#6](https://github.com/Guidap/printrz/issues/5))
 - [x] Show local IP on server settings page ([#4](https://github.com/Guidap/printrz/issues/4))
 - [ ] Add API Documentation page
 - [x] Add self-signed certificates generation for HTTPS origin support ([#6](https://github.com/Guidap/printrz/issues/6))
@@ -70,7 +70,12 @@ $ yarn
 $ yarn run dev
 
 # build electron application for production
-$ yarn run build
+# On windows:
+$ yarn run build --win
+# On OSX:
+$ yarn run build --macos
+# On Debian/Ubuntu:
+$ yarn run build --linux deb tar.xz
 
 # run unit tests
 $ yarn test
