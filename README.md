@@ -11,7 +11,7 @@ Since the API implements the lovely (♥) [node-printer](https://github.com/tojo
 Currently, this app is used by GUIDAP's customers to print cash receipt from a desktop device.
 
 ### Roadmap to `v1`
-- [ ] Fix auto update ([#6](https://github.com/Guidap/printrz/issues/6))
+- [x] Fix auto update (since v0.1.1)
 - [ ] Sign app binaries
 - [x] Add "Reload printers" button ([#3](https://github.com/Guidap/printrz/issues/3))
 - [ ] Show printer state and indicate the default printer of the OS
