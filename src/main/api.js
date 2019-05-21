@@ -1,11 +1,13 @@
-const express = require('express')
-const cors = require('cors')
-const bodyParser = require('body-parser')
-const logger = require('morgan')
-const printer = require('printer')
-const port = 5000
+import { app } from 'electron'
+import express from 'express'
+import cors from 'cors'
+import bodyParser from 'body-parser'
+import logger from 'morgan'
+import printer from 'printer'
+import https from 'https'
+import { getCertificateFiles } from './certificate'
 
-export default function (callback) {
+export default function ({ port }) {
   const server = express()
   server.use(cors())
   server.use(bodyParser.json())
@@ -48,26 +50,31 @@ export default function (callback) {
       }
     })
   })
-  /* const instance = */server.listen(port, () => {
+
+  let isHttps = false
+  let callback = () => {
     console.log(`Print server listening on port ${port}!`)
-    if (callback) {
-      callback()
-    }
-  })
+  }
+  try {
+    console.log('Starting server on HTTPS...')
+    let certFiles = getCertificateFiles(app.getPath('userData'), true)
+    https
+      .createServer(
+        {
+          key: certFiles.privateKey,
+          cert: certFiles.certificate
+        },
+        server
+      )
+      .listen(port, callback)
+    isHttps = true
+  } catch (e) {
+    console.log('Cannot run with HTTPS, fallback on HTTP...')
+    server.listen(port, callback)
+  }
 
   return {
-    // TODO: fix that stuff
-    /* stopServer () {
-      return new Promise((resolve, reject) => {
-        try {
-          instance.close(() => {
-            console.log(`Print server stopped!`)
-            resolve()
-          })
-        } catch (e) {
-          reject(e)
-        }
-      })
-    } */
+    isHttps,
+    port
   }
 }

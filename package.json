@@ -1,6 +1,6 @@
 {
   "name": "printrz",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Sylvain Marty <sylvain@guidap.co>",
   "description": "A bridge used to talk with printers using raw commands (esc/pos 100% compatible)",
   "license": "SEE LICENSE IN LICENSE",
@@ -68,8 +68,10 @@
     "electron-log": "^3.0.5",
     "electron-updater": "^4.0.6",
     "express": "^4.16.4",
+    "ip": "^1.1.5",
     "material-icons": "^0.3.1",
     "morgan": "^1.9.1",
+    "node-forge": "^0.8.2",
     "printer": "^0.2.2",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",

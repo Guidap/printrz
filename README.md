@@ -11,13 +11,14 @@ Since the API implements the lovely (♥) [node-printer](https://github.com/tojo
 Currently, this app is used by GUIDAP's customers to print cash receipt from a desktop device.
 
 ### Roadmap to `v1`
-- [ ] Fix auto update and app certif signature
-- [ ] Add "Reload printers" button ([#3](https://github.com/Guidap/printrz/issues/3))
+- [ ] Fix auto update ([#6](https://github.com/Guidap/printrz/issues/6))
+- [ ] Sign app binaries
+- [x] Add "Reload printers" button ([#3](https://github.com/Guidap/printrz/issues/3))
 - [ ] Show printer state and indicate the default printer of the OS
-- [ ] Server settings page (host, port)
-- [ ] Show local IP on server settings page ([#4](https://github.com/Guidap/printrz/issues/4))
+- [w] Server settings page (host, port) ([#6](https://github.com/Guidap/printrz/issues/5))
+- [x] Show local IP on server settings page ([#4](https://github.com/Guidap/printrz/issues/4))
 - [ ] Add API Documentation page
-- [ ] Add self-signed certificates generation for HTTPS origin support
+- [x] Add self-signed certificates generation for HTTPS origin support ([#6](https://github.com/Guidap/printrz/issues/6))
 - [ ] Allow the user to override the default printer
 - [ ] Allow the user to chose the best print test between ESC/POS, JPG, PDF and plain text
 - [ ] Unit and fonctional testing
