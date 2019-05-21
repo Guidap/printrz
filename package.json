@@ -1,6 +1,6 @@
 {
   "name": "printrz",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Sylvain Marty <sylvain@guidap.co>",
   "description": "A bridge used to talk with printers using raw commands (esc/pos 100% compatible)",
   "license": "SEE LICENSE IN LICENSE",
