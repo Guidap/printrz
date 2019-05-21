@@ -67,21 +67,33 @@ $ set GYP_MSVS_VERSION=2017
 $ yarn
 
 # serve with hot reload at localhost:9080
-$ yarn run dev
+$ yarn dev
 
-# build electron application for production
+# Build (only) electron application for production
 # On windows:
-$ yarn run build --win
+$ yarn build --win
 # On OSX:
-$ yarn run build --macos
+$ yarn build --macos
 # On Debian/Ubuntu:
-$ yarn run build --linux deb tar.xz
+$ yarn build --linux
+
+# Build and release electron application for production
+# We have to create a new tag first
+$ yarn version # set the <new version>
+$ git tag <new version>
+$ git push && git push --tags
+# On windows:
+$ yarn release --win
+# On OSX:
+$ yarn release --macos
+# On Debian/Ubuntu:
+$ yarn release --linux
 
 # run unit tests
 $ yarn test
 
 # lint all JS/Vue component files in `src/`
-$ yarn run lint
+$ yarn lint
 ```
 
 ---
