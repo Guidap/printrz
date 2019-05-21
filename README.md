@@ -77,7 +77,7 @@ $ yarn build --macos
 # On Debian/Ubuntu:
 $ yarn build --linux
 
-# Build and release electron application for production
+# Build and release for production on Github (you must have a valid GH_TOKEN env variable)
 # We have to create a new tag first
 $ yarn version # set the <new version>
 $ git tag <new version>
