@@ -11,11 +11,11 @@ Since the API implements the lovely (♥) [node-printer](https://github.com/tojo
 Currently, this app is used by GUIDAP's customers to print cash receipt from a desktop device.
 
 ### Roadmap to `v1`
-- [ ] Fix auto update ([#6](https://github.com/Guidap/printrz/issues/6))
+- [x] Fix auto update (since v0.1.1)
 - [ ] Sign app binaries
 - [x] Add "Reload printers" button ([#3](https://github.com/Guidap/printrz/issues/3))
 - [ ] Show printer state and indicate the default printer of the OS
-- [w] Server settings page (host, port) ([#6](https://github.com/Guidap/printrz/issues/5))
+- [x] Server settings page (host, port) ([#6](https://github.com/Guidap/printrz/issues/5))
 - [x] Show local IP on server settings page ([#4](https://github.com/Guidap/printrz/issues/4))
 - [ ] Add API Documentation page
 - [x] Add self-signed certificates generation for HTTPS origin support ([#6](https://github.com/Guidap/printrz/issues/6))
@@ -67,16 +67,33 @@ $ set GYP_MSVS_VERSION=2017
 $ yarn
 
 # serve with hot reload at localhost:9080
-$ yarn run dev
+$ yarn dev
 
-# build electron application for production
-$ yarn run build
+# Build (only) electron application for production
+# On windows:
+$ yarn build --win
+# On OSX:
+$ yarn build --macos
+# On Debian/Ubuntu:
+$ yarn build --linux
+
+# Build and release electron application for production
+# We have to create a new tag first
+$ yarn version # set the <new version>
+$ git tag <new version>
+$ git push && git push --tags
+# On windows:
+$ yarn release --win
+# On OSX:
+$ yarn release --macos
+# On Debian/Ubuntu:
+$ yarn release --linux
 
 # run unit tests
 $ yarn test
 
 # lint all JS/Vue component files in `src/`
-$ yarn run lint
+$ yarn lint
 ```
 
 ---

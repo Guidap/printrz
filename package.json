@@ -1,6 +1,6 @@
 {
   "name": "printrz",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Sylvain Marty <sylvain@guidap.co>",
   "description": "A bridge used to talk with printers using raw commands (esc/pos 100% compatible)",
   "license": "SEE LICENSE IN LICENSE",
@@ -10,6 +10,7 @@
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
+    "release": "build",
     "dev": "node .electron-vue/dev-runner.js",
     "lint": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src test",
     "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src test",
@@ -22,8 +23,9 @@
     "rebuild-electron": "./node_modules/.bin/electron-rebuild"
   },
   "build": {
-    "productName": "printrz",
+    "productName": "Printrz",
     "appId": "com.guidap.printrz",
+    "artifactName": "${os}_${name}.${ext}",
     "directories": {
       "output": "build"
     },
@@ -31,7 +33,8 @@
       {
         "provider": "github",
         "owner": "guidap",
-        "repo": "printrz"
+        "repo": "printrz",
+        "vPrefixedTagName": false
       }
     ],
     "files": [
@@ -56,14 +59,33 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/icon.ico",
+      "target": [
+        {
+          "target": "nsis"
+        },
+        {
+          "target": "zip"
+        }
+      ]
     },
     "linux": {
-      "icon": "build/icons"
+      "icon": "build/icons",
+      "target": [
+        {
+          "target": "AppImage"
+        },
+        {
+          "target": "deb"
+        },
+        {
+          "target": "tar.xz"
+        }
+      ]
     }
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "cors": "^2.8.5",
     "electron-log": "^3.0.5",
     "electron-updater": "^4.0.6",
