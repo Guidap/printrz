@@ -24,7 +24,7 @@
   "build": {
     "productName": "Printrz",
     "appId": "com.guidap.printrz",
-    "artifactName": "${os}_${name}.${ext}",
+    "artifactName": "${os}_${arch}_${name}.${ext}",
     "directories": {
       "output": "build"
     },
