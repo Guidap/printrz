@@ -171,15 +171,12 @@
       },
       save: function () {
         let configPath = remote.app.getPath('userData')
-        setConfiguration(configPath, {
-          port: this.server.port
-        })
-          .then(() => {
-            this.snackbarContent = 'Configuration saved! \nYou must restart the app to apply these changes.'
-            if (confirm('You must restart the app to apply these changes. Do you want to restart the app?')) {
-              remote.app.relaunch()
-              remote.app.exit()
-            }
+        let newConf = { port: Number(this.server.port) }
+        setConfiguration(configPath, newConf)
+          .then(() => remote.getGlobal('printrz').restartApi(newConf))
+          .then(api => {
+            this.$http.defaults.baseURL = `${api.isHttps ? 'https' : 'http'}://localhost:${api.port}`
+            this.snackbarContent = `Server restarted on port ${api.port}.`
           })
           .catch(err => {
             this.snackbarContent = 'An error happened when saving.'
@@ -204,11 +201,14 @@
           })
           .then(files => {
             this.certificateFiles = files
-            this.snackbarContent = 'Certificate files generated! \nYou must restart the app to apply these changes.'
-            if (confirm('You must restart the app to apply these changes. Do you want to restart the app?')) {
-              remote.app.relaunch()
-              remote.app.exit()
-            }
+            let runningPort = remote.getGlobal('printrz').configuration.port
+            return remote.getGlobal('printrz').restartApi({ port: runningPort })
+          })
+          .then(api => {
+            this.$http.defaults.baseURL = `${api.isHttps ? 'https' : 'http'}://localhost:${api.port}`
+            this.snackbarContent = api.isHttps
+              ? `Certificate generated. Server restarted on HTTPS port ${api.port}.`
+              : `Certificate generated but server failed to switch to HTTPS — still on HTTP port ${api.port}.`
           }).catch(err => {
             this.snackbarContent = 'An error happened when generating certificate files.'
             console.log('generateCertificateFiles', err)

@@ -41,7 +41,16 @@ function createWindow () {
   let conf = getConfiguration(app.getPath('userData'), true)
   global.printrz = {
     configuration: conf,
-    api: new Api(conf)
+    api: new Api(conf),
+    restartApi: async function (newConf) {
+      await global.printrz.api.stopServer()
+      global.printrz.configuration = newConf
+      global.printrz.api = new Api(newConf)
+      return {
+        isHttps: global.printrz.api.isHttps,
+        port: global.printrz.api.port
+      }
+    }
   }
 
   /**
