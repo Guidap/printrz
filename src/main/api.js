@@ -4,6 +4,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import logger from 'morgan'
 import printer from '@grandchef/node-printer'
+import http from 'http'
 import https from 'https'
 import { getCertificateFiles } from './certificate'
 
@@ -14,6 +15,9 @@ export default function ({ port }) {
   expressApp.use(logger('short', {
     skip: function (req, res) { return res.statusCode < 400 }
   }))
+  // Note: the function returns a Promise that resolves once the server is
+  // listening, or rejects if `listen()` errors (e.g. EADDRINUSE). Callers
+  // should `await` it.
   /**
    * Check if the server is running
    */
@@ -53,37 +57,45 @@ export default function ({ port }) {
 
   let isHttps = false
   let httpServer
-  let callback = () => {
-    console.log(`Print server listening on port ${port}!`)
-  }
   try {
     console.log('Starting server on HTTPS...')
     let certFiles = getCertificateFiles(app.getPath('userData'), true)
-    httpServer = https
-      .createServer(
-        {
-          key: certFiles.privateKey,
-          cert: certFiles.certificate
-        },
-        expressApp
-      )
-      .listen(port, callback)
+    httpServer = https.createServer(
+      {
+        key: certFiles.privateKey,
+        cert: certFiles.certificate
+      },
+      expressApp
+    )
     isHttps = true
   } catch (e) {
     console.log('Cannot run with HTTPS, fallback on HTTP...')
-    httpServer = expressApp.listen(port, callback)
+    httpServer = http.createServer(expressApp)
   }
 
-  return {
-    isHttps,
-    port,
-    stopServer () {
-      return new Promise((resolve, reject) => {
-        httpServer.close(err => err ? reject(err) : resolve())
-        if (typeof httpServer.closeAllConnections === 'function') {
-          httpServer.closeAllConnections()
+  return new Promise((resolve, reject) => {
+    const onError = (err) => {
+      httpServer.removeListener('listening', onListening)
+      reject(err)
+    }
+    const onListening = () => {
+      httpServer.removeListener('error', onError)
+      console.log(`Print server listening on port ${port}!`)
+      resolve({
+        isHttps,
+        port,
+        stopServer () {
+          return new Promise((resolve, reject) => {
+            httpServer.close(err => err ? reject(err) : resolve())
+            if (typeof httpServer.closeAllConnections === 'function') {
+              httpServer.closeAllConnections()
+            }
+          })
         }
       })
     }
-  }
+    httpServer.once('error', onError)
+    httpServer.once('listening', onListening)
+    httpServer.listen(port)
+  })
 }

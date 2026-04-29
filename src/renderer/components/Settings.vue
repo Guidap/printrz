@@ -179,8 +179,14 @@
             this.snackbarContent = `Server restarted on port ${api.port}.`
           })
           .catch(err => {
-            this.snackbarContent = 'An error happened when saving.'
-            console.log('setConfiguration', err)
+            console.log('save', err)
+            const msg = (err && err.message) || ''
+            if (err && (err.code === 'EADDRINUSE' || msg.includes('already in use'))) {
+              this.snackbarContent = `Port ${this.server.port} is already in use. Please choose a different port.`
+              this.server.port = remote.getGlobal('printrz').configuration.port
+            } else {
+              this.snackbarContent = `An error happened when saving: ${msg || 'unknown error'}`
+            }
           })
       },
       generateCertificate: function () {
@@ -210,8 +216,13 @@
               ? `Certificate generated. Server restarted on HTTPS port ${api.port}.`
               : `Certificate generated but server failed to switch to HTTPS — still on HTTP port ${api.port}.`
           }).catch(err => {
-            this.snackbarContent = 'An error happened when generating certificate files.'
-            console.log('generateCertificateFiles', err)
+            console.log('generateCertificate', err)
+            const msg = (err && err.message) || ''
+            if (err && (err.code === 'EADDRINUSE' || msg.includes('already in use'))) {
+              this.snackbarContent = `Certificate written, but the port is now busy. Try changing the port in Server configuration.`
+            } else {
+              this.snackbarContent = `An error happened when generating certificate files: ${msg || 'unknown error'}`
+            }
           })
       }
     }

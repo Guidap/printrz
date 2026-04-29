@@ -35,17 +35,51 @@ const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
-function createWindow () {
+function makeStubApi (conf, err) {
+  return {
+    isHttps: false,
+    port: conf.port,
+    error: err && err.code === 'EADDRINUSE'
+      ? `Port ${conf.port} is already in use.`
+      : (err && err.message) || 'API server is not running.',
+    stopServer: () => Promise.resolve()
+  }
+}
+
+async function createWindow () {
   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdatesAndNotify()
 
   let conf = getConfiguration(app.getPath('userData'), true)
+  let api
+  try {
+    api = await Api(conf)
+  } catch (err) {
+    log.warn(`Could not start API on port ${conf.port}:`, err.message)
+    api = makeStubApi(conf, err)
+  }
   global.printrz = {
     configuration: conf,
-    api: new Api(conf),
+    api,
     restartApi: async function (newConf) {
+      const oldConf = global.printrz.configuration
       await global.printrz.api.stopServer()
-      global.printrz.configuration = newConf
-      global.printrz.api = new Api(newConf)
+      try {
+        global.printrz.api = await Api(newConf)
+        global.printrz.configuration = newConf
+      } catch (err) {
+        // New port failed: restart on the previous conf so the app stays alive.
+        try {
+          global.printrz.api = await Api(oldConf)
+        } catch (rollbackErr) {
+          log.error('Rollback to previous conf failed:', rollbackErr.message)
+          global.printrz.api = makeStubApi(oldConf, rollbackErr)
+        }
+        const e = new Error(err.code === 'EADDRINUSE'
+          ? `Port ${newConf.port} is already in use.`
+          : err.message)
+        e.code = err.code
+        throw e
+      }
       return {
         isHttps: global.printrz.api.isHttps,
         port: global.printrz.api.port
