@@ -73,8 +73,10 @@ $ yarn dev
 # Build (only) electron application for production
 # On windows:
 $ yarn build --win
-# On OSX:
-$ yarn build --macos
+# On macOS Intel:
+$ yarn build --macos --x64
+# On macOS Apple Silicon:
+$ yarn build --macos --arm64
 # On Debian/Ubuntu:
 $ yarn build --linux
 
@@ -85,8 +87,10 @@ $ git tag <new version>
 $ git push && git push --tags
 # On windows:
 $ yarn release --win
-# On OSX:
-$ yarn release --macos
+# On macOS Intel:
+$ yarn release --macos --x64
+# On macOS Apple Silicon:
+$ yarn release --macos --arm64
 # On Debian/Ubuntu:
 $ yarn release --linux
 
