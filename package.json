@@ -26,6 +26,7 @@
     "appId": "com.guidap.printrz",
     "artifactName": "${os}_${arch}_${name}.${ext}",
     "directories": {
+      "buildResources": "buildResources",
       "output": "build"
     },
     "publish": [
@@ -54,11 +55,8 @@
         }
       ]
     },
-    "mac": {
-      "icon": "build/icons/icon.icns"
-    },
+    "mac": {},
     "win": {
-      "icon": "build/icons/icon.ico",
       "target": [
         {
           "target": "nsis"
@@ -69,7 +67,6 @@
       ]
     },
     "linux": {
-      "icon": "build/icons",
       "target": [
         {
           "target": "AppImage"
