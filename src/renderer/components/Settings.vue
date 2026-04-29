@@ -56,6 +56,15 @@
           </md-card-header-text>
         </md-card-header>
 
+        <md-card-content v-if="hasCertificate" class="cert-paths">
+          <p><span class="cert-paths__label">Private key</span><code>{{ certificatePaths.key }}</code></p>
+          <p><span class="cert-paths__label">Certificate</span><code>{{ certificatePaths.cert }}</code></p>
+          <md-button class="md-dense" @click="openCertificateFolder" type="button">
+            <md-icon>folder_open</md-icon>
+            Open folder
+          </md-button>
+        </md-card-content>
+
         <md-card-content>
           <md-field>
             <label for="organizationName">Organization name</label>
@@ -104,10 +113,11 @@
   // TODO: improve accuracy with https://github.com/indutny/node-ip/issues/85#issuecomment-417925130
   // and https://github.com/indutny/node-ip/blob/master/lib/ip.js#L342
   import * as remote from '@electron/remote'
+  import { shell } from 'electron'
   import ip from 'ip'
   import Vue from 'vue'
   import { MdCard, MdField, MdSnackbar } from 'vue-material/dist/components'
-  import { getCertificateFiles, generateCertificateFiles } from '&/certificate'
+  import { getCertificateFiles, generateCertificateFiles, getPaths } from '&/certificate'
   import { setConfiguration } from '&/configuration'
 
   Vue.use(MdCard)
@@ -156,6 +166,12 @@
       },
       hasCertificate: function () {
         return this.certificateFiles !== null
+      },
+      certificateFolder: function () {
+        return remote.app.getPath('userData')
+      },
+      certificatePaths: function () {
+        return getPaths(this.certificateFolder)
       }
     },
 
@@ -168,6 +184,9 @@
         document.execCommand('copy')
         document.body.removeChild(el)
         this.snackbarContent = 'Local IP copied in your clipboard!'
+      },
+      openCertificateFolder: function () {
+        shell.openPath(this.certificateFolder)
       },
       save: function () {
         let configPath = remote.app.getPath('userData')
@@ -232,5 +251,29 @@
 <style scoped lang="scss">
   .md-card {
     margin-bottom: 12px;
+  }
+
+  .cert-paths {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 0;
+    p {
+      text-align: left;
+      margin: 4px 0;
+      font-size: 13px;
+      word-break: break-all;
+    }
+    .cert-paths__label {
+      display: inline-block;
+      width: 90px;
+      color: rgba(0, 0, 0, 0.54);
+    }
+    code {
+      background: rgba(0, 0, 0, 0.04);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+    }
   }
 </style>
