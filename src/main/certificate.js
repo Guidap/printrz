@@ -6,15 +6,41 @@ const readFileAsync = promisify(fs.readFile)
 const writeFileAsync = promisify(fs.writeFile)
 forge.options.usePureJavaScript = true
 
+const CERT_FILE_PREFIX = 'guidap_printrz_'
+
 /**
- * Get certificate files paths and names
+ * Get certificate files paths and names (canonical, prefixed)
  * @param {String} certsPath The certificate's files main location
  */
 let getPaths = function (certsPath) {
   return {
+    key: path.join(certsPath, `${CERT_FILE_PREFIX}key.pem`),
+    cert: path.join(certsPath, `${CERT_FILE_PREFIX}cert.pem`)
+  }
+}
+
+/**
+ * Legacy (un-prefixed) paths kept for backward compatibility with
+ * installs that generated their certificate before the prefix was introduced.
+ */
+let getLegacyPaths = function (certsPath) {
+  return {
     key: path.join(certsPath, 'key.pem'),
     cert: path.join(certsPath, 'cert.pem')
   }
+}
+
+/**
+ * Resolve the paths actually present on disk: prefixed if available,
+ * otherwise legacy if both legacy files exist, otherwise prefixed (the
+ * canonical destination for future generations).
+ */
+let getActualPaths = function (certsPath) {
+  let paths = getPaths(certsPath)
+  if (fs.existsSync(paths.key) && fs.existsSync(paths.cert)) return paths
+  let legacy = getLegacyPaths(certsPath)
+  if (fs.existsSync(legacy.key) && fs.existsSync(legacy.cert)) return legacy
+  return paths
 }
 
 /**
@@ -23,7 +49,7 @@ let getPaths = function (certsPath) {
  * @param {*} sync           If true, load the file synchronously (default false)
  */
 let getCertificateFiles = function (certsPath, sync = false) {
-  let paths = getPaths(certsPath)
+  let paths = getActualPaths(certsPath)
 
   if (sync) {
     return {
@@ -82,6 +108,7 @@ let generateCertificateFiles = function (certsPath, { organizationName, countryN
 
 export {
   getPaths,
+  getActualPaths,
   getCertificateFiles,
   generateCertificateFiles
 }

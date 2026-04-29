@@ -117,7 +117,7 @@
   import ip from 'ip'
   import Vue from 'vue'
   import { MdCard, MdField, MdSnackbar } from 'vue-material/dist/components'
-  import { getCertificateFiles, generateCertificateFiles, getPaths } from '&/certificate'
+  import { getCertificateFiles, generateCertificateFiles, getActualPaths } from '&/certificate'
   import { setConfiguration } from '&/configuration'
 
   Vue.use(MdCard)
@@ -171,7 +171,8 @@
         return remote.app.getPath('userData')
       },
       certificatePaths: function () {
-        return getPaths(this.certificateFolder)
+        // Read certificateFiles so the computed re-evaluates after a (re)generation.
+        return this.certificateFiles ? getActualPaths(this.certificateFolder) : null
       }
     },
 
