@@ -4,7 +4,7 @@ import { promisify } from 'util'
 const readFileAsync = promisify(fs.readFile)
 const writeFileAsync = promisify(fs.writeFile)
 const DEFAULT_CONFIGURATION = {
-  port: 5000
+  port: 5001
 }
 
 /**

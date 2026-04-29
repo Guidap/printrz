@@ -103,6 +103,7 @@
 <script>
   // TODO: improve accuracy with https://github.com/indutny/node-ip/issues/85#issuecomment-417925130
   // and https://github.com/indutny/node-ip/blob/master/lib/ip.js#L342
+  import * as remote from '@electron/remote'
   import ip from 'ip'
   import Vue from 'vue'
   import { MdCard, MdField, MdSnackbar } from 'vue-material/dist/components'
@@ -124,8 +125,8 @@
     },
 
     created: function () {
-      this.server.port = this.$electron.remote.getGlobal('printrz').configuration.port
-      getCertificateFiles(this.$electron.remote.app.getPath('userData'))
+      this.server.port = remote.getGlobal('printrz').configuration.port
+      getCertificateFiles(remote.app.getPath('userData'))
         .then(files => {
           this.certificateFiles = files
         })
@@ -169,15 +170,15 @@
         this.snackbarContent = 'Local IP copied in your clipboard!'
       },
       save: function () {
-        let configPath = this.$electron.remote.app.getPath('userData')
+        let configPath = remote.app.getPath('userData')
         setConfiguration(configPath, {
           port: this.server.port
         })
           .then(() => {
             this.snackbarContent = 'Configuration saved! \nYou must restart the app to apply these changes.'
             if (confirm('You must restart the app to apply these changes. Do you want to restart the app?')) {
-              this.$electron.remote.app.relaunch()
-              this.$electron.remote.app.exit()
+              remote.app.relaunch()
+              remote.app.exit()
             }
           })
           .catch(err => {
@@ -193,7 +194,7 @@
           return
         }
 
-        let configPath = this.$electron.remote.app.getPath('userData')
+        let configPath = remote.app.getPath('userData')
         generateCertificateFiles(configPath,
           {
             organizationName: this.certificate.organizationName || this.$options.CERTIFICATE_PLACEHOLDERS.organizationName,
@@ -205,8 +206,8 @@
             this.certificateFiles = files
             this.snackbarContent = 'Certificate files generated! \nYou must restart the app to apply these changes.'
             if (confirm('You must restart the app to apply these changes. Do you want to restart the app?')) {
-              this.$electron.remote.app.relaunch()
-              this.$electron.remote.app.exit()
+              remote.app.relaunch()
+              remote.app.exit()
             }
           }).catch(err => {
             this.snackbarContent = 'An error happened when generating certificate files.'

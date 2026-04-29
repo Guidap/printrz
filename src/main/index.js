@@ -1,10 +1,13 @@
 'use strict'
 
 import { app, BrowserWindow } from 'electron'
+import * as remoteMain from '@electron/remote/main'
 import { autoUpdater } from 'electron-updater'
 import log from 'electron-log'
 import Api from './api'
 import { getConfiguration } from './configuration'
+
+remoteMain.initialize()
 
 app.commandLine.appendSwitch('ignore-certificate-errors')
 
@@ -47,9 +50,14 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     height: 563,
     useContentSize: true,
-    width: 1000
+    width: 1000,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
   })
 
+  remoteMain.enable(mainWindow.webContents)
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {

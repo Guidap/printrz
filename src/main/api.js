@@ -3,7 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import logger from 'morgan'
-import printer from 'printer'
+import printer from '@grandchef/node-printer'
 import https from 'https'
 import { getCertificateFiles } from './certificate'
 
