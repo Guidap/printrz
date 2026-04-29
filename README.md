@@ -17,7 +17,7 @@ Currently, this app is used by GUIDAP's customers to print cash receipt from a d
 - [ ] Show printer state and indicate the default printer of the OS
 - [x] Server settings page (host, port) ([#6](https://github.com/Guidap/printrz/issues/5))
 - [x] Show local IP on server settings page ([#4](https://github.com/Guidap/printrz/issues/4))
-- [ ] Add API Documentation page
+- [x] Add API Documentation page
 - [x] Add self-signed certificates generation for HTTPS origin support ([#6](https://github.com/Guidap/printrz/issues/6))
 - [ ] Allow the user to override the default printer
 - [ ] Allow the user to chose the best print test between ESC/POS, JPG, PDF and plain text
@@ -32,14 +32,15 @@ Install [the latest release](https://github.com/Guidap/printrz/releases/latest) 
 
 Open this [JSFiddle](https://jsfiddle.net/3pc1vna5/) and try yourself !
 
-### API :
-| Route       | Method | Body                                                                                                                             | Description                                    |
-|-------------|--------|----------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| `/`         | GET    |                                                                                                                                  | Server healthcheck endpoint. No more, no less. |
-| `/printers` | GET    |                                                                                                                                  | Get the list of installed printers.            |
-| `/job`      | POST   | `{ "printer": "printer-identifier", "type": "type: RAW, TEXT, PDF, JPEG, ...", "data": "command"}` | Print something on the desired printer.        |
+### API
 
-This API expose some [node-printer](https://github.com/tojocky/node-printer) features so if you don't find the information you need here, it could be usefull to check the documentation of this project 👍.
+| Route       | Method | Description                                    |
+|-------------|--------|------------------------------------------------|
+| `/`         | GET    | Server healthcheck endpoint. |
+| `/printers` | GET    | Get the list of installed printers. |
+| `/job`      | POST   | Send a print job to a specific printer. |
+
+See **[API.md](./API.md)** for the full reference (request/response shapes, examples, TLS notes, error codes).
 
 ## Contribute
 Follow the guidelines exposed in the [CONTRIBUTING file](https://github.com/Guidap/printrz/blob/master/CONTRIBUTING.md). 
