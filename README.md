@@ -1,16 +1,17 @@
 # Printrz
 
 > Printrz is a bridge between web app and printers installed on the OS.
-
 > It was originally built to send raw ESC/POS commands to thermal printers from a web point of sale but this project can answer other purposes (see API doc for more).
 
 ## Introduction
+
 The initial purpose of this application was to send ESC/POS commands to thermal printers from a web app.
 Since the API implements the lovely (♥) [node-printer](https://github.com/tojocky/node-printer) project, the API can theorically be used to print PDF, JPG and whatsoever.
 
 Currently, this app is used by GUIDAP's customers to print cash receipt from a desktop device.
 
 ### Roadmap to `v1`
+
 - [x] Fix auto update (since v0.1.1)
 - [ ] Sign app binaries
 - [x] Add "Reload printers" button ([#3](https://github.com/Guidap/printrz/issues/3))
@@ -25,9 +26,11 @@ Currently, this app is used by GUIDAP's customers to print cash receipt from a d
 - [ ] Create a fancy logo
 
 ### Roadmap to `v2`
+
 - [ ] Separate Electron app and API to different projects (the API could be useful as a standalone command line tool)
 
 ## How to use
+
 Install [the latest release](https://github.com/Guidap/printrz/releases/latest) of Printrz on your favorite operating system.
 
 Open this [JSFiddle](https://jsfiddle.net/3pc1vna5/) and try yourself !
@@ -52,33 +55,39 @@ This removes the quarantine attribute and allows the app to launch normally. You
 
 | Route       | Method | Description                                    |
 |-------------|--------|------------------------------------------------|
-| `/`         | GET    | Server healthcheck endpoint. |
-| `/printers` | GET    | Get the list of installed printers. |
-| `/job`      | POST   | Send a print job to a specific printer. |
+| `/`         | GET    | Server healthcheck endpoint.                   |
+| `/printers` | GET    | Get the list of installed printers.            |
+| `/job`      | POST   | Send a print job to a specific printer.        |
 
 See **[API.md](./API.md)** for the full reference (request/response shapes, examples, TLS notes, error codes).
 
 ## Contribute
-Follow the guidelines exposed in the [CONTRIBUTING file](https://github.com/Guidap/printrz/blob/master/CONTRIBUTING.md). 
+
+Follow the guidelines exposed in the [CONTRIBUTING file](https://github.com/Guidap/printrz/blob/master/CONTRIBUTING.md).
 
 ## How to develop
+
 ### Prerequisites
+
 You have to install [Node (LTS)](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/fr/docs/install).
 
 #### Windows users
+
 Install [Python](https://www.python.org/downloads/windows/) (executable installer).
 
 Follow [this tutorial](https://projects.raspberrypi.org/en/projects/using-pip-on-windows/5) to know the Python executable path.
 
 Open the Node Prompt as administrator and run the following command :
+
 ```bash
-$ set PYTHON=C:\Users\...\AppData\Local\Programs\Python\Python37\python.exe # Change with your own Path
-$ npm install --global --production windows-build-tools@4.0.0
-$ yarn config set msvs_version 2017
-$ set GYP_MSVS_VERSION=2017
+set PYTHON=C:\Users\...\AppData\Local\Programs\Python\Python37\python.exe # Change with your own Path
+npm install --global --production windows-build-tools@4.0.0
+yarn config set msvs_version 2017
+set GYP_MSVS_VERSION=2017
 ```
 
 ### Build Setup
+
 ``` bash
 # install dependencies
 $ yarn
@@ -118,6 +127,7 @@ $ yarn lint
 ```
 
 ---
+
 ## Special thanks
 
 To [@tojocky](https://github.com/tojocky) with his [node-printer](https://github.com/tojocky/node-printer) project ❤️.
