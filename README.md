@@ -32,6 +32,22 @@ Install [the latest release](https://github.com/Guidap/printrz/releases/latest) 
 
 Open this [JSFiddle](https://jsfiddle.net/3pc1vna5/) and try yourself !
 
+### macOS installation
+
+The app is currently **not signed nor notarized** with an Apple Developer ID. As a result, when you download the DMG and install Printrz on a Mac that did not build it, macOS Gatekeeper blocks the launch with a message like *"Printrz is damaged and can't be opened"* or *"unidentified developer"*.
+
+This happens because macOS automatically tags files downloaded from the internet (or transferred via AirDrop, USB, etc.) with a `com.apple.quarantine` extended attribute, which Gatekeeper then refuses to validate without a signature.
+
+To bypass this, after installing the app into `/Applications`, run the following command in the Terminal:
+
+```bash
+xattr -cr /Applications/Printrz.app
+```
+
+This removes the quarantine attribute and allows the app to launch normally. You only need to run it once per installation.
+
+> Note: this is a temporary workaround. The proper fix is to sign and notarize the app — see the *"Sign app binaries"* item in the roadmap above.
+
 ### API
 
 | Route       | Method | Description                                    |
