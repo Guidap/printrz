@@ -23,7 +23,7 @@
         </md-list>
 
         <p class="made-with-love">Made with <span class="heart">❤</span> by GUIDAP</p>
-        <p>v{{ $electron.remote.app.getVersion() }}</p>
+        <p>v{{ version }}</p>
       </md-app-drawer>
       
       <md-app-content>
@@ -36,6 +36,7 @@
 <script>
   import 'vue-material/dist/vue-material.min.css'
   import 'vue-material/dist/theme/default.css'
+  import * as remote from '@electron/remote'
   import Vue from 'vue'
   import { MdApp, MdDrawer, MdToolbar, MdContent, MdList, MdIcon } from 'vue-material/dist/components'
 
@@ -48,6 +49,12 @@
 
   export default {
     name: 'printrz',
+
+    data () {
+      return {
+        version: remote.app.getVersion()
+      }
+    },
 
     computed: {
       title () {

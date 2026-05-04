@@ -1,23 +1,24 @@
 # Printrz
 
 > Printrz is a bridge between web app and printers installed on the OS.
-
 > It was originally built to send raw ESC/POS commands to thermal printers from a web point of sale but this project can answer other purposes (see API doc for more).
 
 ## Introduction
+
 The initial purpose of this application was to send ESC/POS commands to thermal printers from a web app.
 Since the API implements the lovely (♥) [node-printer](https://github.com/tojocky/node-printer) project, the API can theorically be used to print PDF, JPG and whatsoever.
 
 Currently, this app is used by GUIDAP's customers to print cash receipt from a desktop device.
 
 ### Roadmap to `v1`
+
 - [x] Fix auto update (since v0.1.1)
 - [ ] Sign app binaries
 - [x] Add "Reload printers" button ([#3](https://github.com/Guidap/printrz/issues/3))
 - [ ] Show printer state and indicate the default printer of the OS
 - [x] Server settings page (host, port) ([#6](https://github.com/Guidap/printrz/issues/5))
 - [x] Show local IP on server settings page ([#4](https://github.com/Guidap/printrz/issues/4))
-- [ ] Add API Documentation page
+- [x] Add API Documentation page
 - [x] Add self-signed certificates generation for HTTPS origin support ([#6](https://github.com/Guidap/printrz/issues/6))
 - [ ] Allow the user to override the default printer
 - [ ] Allow the user to chose the best print test between ESC/POS, JPG, PDF and plain text
@@ -25,43 +26,68 @@ Currently, this app is used by GUIDAP's customers to print cash receipt from a d
 - [ ] Create a fancy logo
 
 ### Roadmap to `v2`
+
 - [ ] Separate Electron app and API to different projects (the API could be useful as a standalone command line tool)
 
 ## How to use
+
 Install [the latest release](https://github.com/Guidap/printrz/releases/latest) of Printrz on your favorite operating system.
 
 Open this [JSFiddle](https://jsfiddle.net/3pc1vna5/) and try yourself !
 
-### API :
-| Route       | Method | Body                                                                                                                             | Description                                    |
-|-------------|--------|----------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| `/`         | GET    |                                                                                                                                  | Server healthcheck endpoint. No more, no less. |
-| `/printers` | GET    |                                                                                                                                  | Get the list of installed printers.            |
-| `/job`      | POST   | `{ "printer": "printer-identifier", "type": "type: RAW, TEXT, PDF, JPEG, ...", "data": "command"}` | Print something on the desired printer.        |
+### macOS installation
 
-This API expose some [node-printer](https://github.com/tojocky/node-printer) features so if you don't find the information you need here, it could be usefull to check the documentation of this project 👍.
+The app is currently **not signed nor notarized** with an Apple Developer ID. As a result, when you download the DMG and install Printrz on a Mac that did not build it, macOS Gatekeeper blocks the launch with a message like *"Printrz is damaged and can't be opened"* or *"unidentified developer"*.
+
+This happens because macOS automatically tags files downloaded from the internet (or transferred via AirDrop, USB, etc.) with a `com.apple.quarantine` extended attribute, which Gatekeeper then refuses to validate without a signature.
+
+To bypass this, after installing the app into `/Applications`, run the following command in the Terminal:
+
+```bash
+xattr -cr /Applications/Printrz.app
+```
+
+This removes the quarantine attribute and allows the app to launch normally. You only need to run it once per installation.
+
+> Note: this is a temporary workaround. The proper fix is to sign and notarize the app — see the *"Sign app binaries"* item in the roadmap above.
+
+### API
+
+| Route       | Method | Description                                    |
+|-------------|--------|------------------------------------------------|
+| `/`         | GET    | Server healthcheck endpoint.                   |
+| `/printers` | GET    | Get the list of installed printers.            |
+| `/job`      | POST   | Send a print job to a specific printer.        |
+
+See **[API.md](./API.md)** for the full reference (request/response shapes, examples, TLS notes, error codes).
 
 ## Contribute
-Follow the guidelines exposed in the [CONTRIBUTING file](https://github.com/Guidap/printrz/blob/master/CONTRIBUTING.md). 
+
+Follow the guidelines exposed in the [CONTRIBUTING file](https://github.com/Guidap/printrz/blob/master/CONTRIBUTING.md).
 
 ## How to develop
+
 ### Prerequisites
+
 You have to install [Node (LTS)](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/fr/docs/install).
 
 #### Windows users
+
 Install [Python](https://www.python.org/downloads/windows/) (executable installer).
 
 Follow [this tutorial](https://projects.raspberrypi.org/en/projects/using-pip-on-windows/5) to know the Python executable path.
 
 Open the Node Prompt as administrator and run the following command :
+
 ```bash
-$ set PYTHON=C:\Users\...\AppData\Local\Programs\Python\Python37\python.exe # Change with your own Path
-$ npm install --global --production windows-build-tools@4.0.0
-$ yarn config set msvs_version 2017
-$ set GYP_MSVS_VERSION=2017
+set PYTHON=C:\Users\...\AppData\Local\Programs\Python\Python37\python.exe # Change with your own Path
+npm install --global --production windows-build-tools@4.0.0
+yarn config set msvs_version 2017
+set GYP_MSVS_VERSION=2017
 ```
 
 ### Build Setup
+
 ``` bash
 # install dependencies
 $ yarn
@@ -72,8 +98,10 @@ $ yarn dev
 # Build (only) electron application for production
 # On windows:
 $ yarn build --win
-# On OSX:
-$ yarn build --macos
+# On macOS Intel:
+$ yarn build --macos --x64
+# On macOS Apple Silicon:
+$ yarn build --macos --arm64
 # On Debian/Ubuntu:
 $ yarn build --linux
 
@@ -84,8 +112,10 @@ $ git tag <new version>
 $ git push && git push --tags
 # On windows:
 $ yarn release --win
-# On OSX:
-$ yarn release --macos
+# On macOS Intel:
+$ yarn release --macos --x64
+# On macOS Apple Silicon:
+$ yarn release --macos --arm64
 # On Debian/Ubuntu:
 $ yarn release --linux
 
@@ -97,6 +127,7 @@ $ yarn lint
 ```
 
 ---
+
 ## Special thanks
 
 To [@tojocky](https://github.com/tojocky) with his [node-printer](https://github.com/tojocky/node-printer) project ❤️.

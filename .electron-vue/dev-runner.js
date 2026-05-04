@@ -105,7 +105,7 @@ function startMain () {
 
         setTimeout(() => {
           manualRestart = false
-        }, 5000)
+        }, 5001)
       }
 
       resolve()
@@ -126,8 +126,10 @@ function startElectron () {
     args = args.concat(process.argv.slice(2))
   }
 
-  electronProcess = spawn(electron, args)
-  
+  const electronEnv = { ...process.env }
+  delete electronEnv.NODE_OPTIONS
+  electronProcess = spawn(electron, args, { env: electronEnv })
+
   electronProcess.stdout.on('data', data => {
     electronLog(data, 'blue')
   })
