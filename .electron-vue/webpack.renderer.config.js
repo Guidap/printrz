@@ -3,10 +3,11 @@
 process.env.BABEL_ENV = 'renderer'
 
 const path = require('path')
+const sass = require('sass')
 const { dependencies } = require('../package.json')
 const webpack = require('webpack')
 
-const BabiliWebpackPlugin = require('babili-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -44,11 +45,19 @@ let rendererConfig = {
       },
       {
         test: /\.scss$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader']
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          { loader: 'sass-loader', options: { implementation: sass } }
+        ]
       },
       {
         test: /\.sass$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          { loader: 'sass-loader', options: { implementation: sass, indentedSyntax: true } }
+        ]
       },
       {
         test: /\.less$/,
@@ -125,6 +134,7 @@ let rendererConfig = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
+      isBrowser: false,
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
@@ -170,8 +180,10 @@ if (process.env.NODE_ENV !== 'production') {
 if (process.env.NODE_ENV === 'production') {
   rendererConfig.devtool = ''
 
+  rendererConfig.optimization = {
+    minimizer: [new TerserPlugin()]
+  }
   rendererConfig.plugins.push(
-    new BabiliWebpackPlugin(),
     new CopyWebpackPlugin([
       {
         from: path.join(__dirname, '../static'),

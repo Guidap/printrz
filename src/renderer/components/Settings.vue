@@ -56,6 +56,15 @@
           </md-card-header-text>
         </md-card-header>
 
+        <md-card-content v-if="hasCertificate" class="cert-paths">
+          <p><span class="cert-paths__label">Private key</span><code>{{ certificatePaths.key }}</code></p>
+          <p><span class="cert-paths__label">Certificate</span><code>{{ certificatePaths.cert }}</code></p>
+          <md-button class="md-dense" @click="openCertificateFolder" type="button">
+            <md-icon>folder_open</md-icon>
+            Open folder
+          </md-button>
+        </md-card-content>
+
         <md-card-content>
           <md-field>
             <label for="organizationName">Organization name</label>
@@ -103,10 +112,12 @@
 <script>
   // TODO: improve accuracy with https://github.com/indutny/node-ip/issues/85#issuecomment-417925130
   // and https://github.com/indutny/node-ip/blob/master/lib/ip.js#L342
+  import * as remote from '@electron/remote'
+  import { shell } from 'electron'
   import ip from 'ip'
   import Vue from 'vue'
   import { MdCard, MdField, MdSnackbar } from 'vue-material/dist/components'
-  import { getCertificateFiles, generateCertificateFiles } from '&/certificate'
+  import { getCertificateFiles, generateCertificateFiles, getActualPaths } from '&/certificate'
   import { setConfiguration } from '&/configuration'
 
   Vue.use(MdCard)
@@ -124,8 +135,8 @@
     },
 
     created: function () {
-      this.server.port = this.$electron.remote.getGlobal('printrz').configuration.port
-      getCertificateFiles(this.$electron.remote.app.getPath('userData'))
+      this.server.port = remote.getGlobal('printrz').configuration.port
+      getCertificateFiles(remote.app.getPath('userData'))
         .then(files => {
           this.certificateFiles = files
         })
@@ -155,6 +166,13 @@
       },
       hasCertificate: function () {
         return this.certificateFiles !== null
+      },
+      certificateFolder: function () {
+        return remote.app.getPath('userData')
+      },
+      certificatePaths: function () {
+        // Read certificateFiles so the computed re-evaluates after a (re)generation.
+        return this.certificateFiles ? getActualPaths(this.certificateFolder) : null
       }
     },
 
@@ -168,21 +186,27 @@
         document.body.removeChild(el)
         this.snackbarContent = 'Local IP copied in your clipboard!'
       },
+      openCertificateFolder: function () {
+        shell.openPath(this.certificateFolder)
+      },
       save: function () {
-        let configPath = this.$electron.remote.app.getPath('userData')
-        setConfiguration(configPath, {
-          port: this.server.port
-        })
-          .then(() => {
-            this.snackbarContent = 'Configuration saved! \nYou must restart the app to apply these changes.'
-            if (confirm('You must restart the app to apply these changes. Do you want to restart the app?')) {
-              this.$electron.remote.app.relaunch()
-              this.$electron.remote.app.exit()
-            }
+        let configPath = remote.app.getPath('userData')
+        let newConf = { port: Number(this.server.port) }
+        setConfiguration(configPath, newConf)
+          .then(() => remote.getGlobal('printrz').restartApi(newConf))
+          .then(api => {
+            this.$http.defaults.baseURL = `${api.isHttps ? 'https' : 'http'}://localhost:${api.port}`
+            this.snackbarContent = `Server restarted on port ${api.port}.`
           })
           .catch(err => {
-            this.snackbarContent = 'An error happened when saving.'
-            console.log('setConfiguration', err)
+            console.log('save', err)
+            const msg = (err && err.message) || ''
+            if (err && (err.code === 'EADDRINUSE' || msg.includes('already in use'))) {
+              this.snackbarContent = `Port ${this.server.port} is already in use. Please choose a different port.`
+              this.server.port = remote.getGlobal('printrz').configuration.port
+            } else {
+              this.snackbarContent = `An error happened when saving: ${msg || 'unknown error'}`
+            }
           })
       },
       generateCertificate: function () {
@@ -193,7 +217,7 @@
           return
         }
 
-        let configPath = this.$electron.remote.app.getPath('userData')
+        let configPath = remote.app.getPath('userData')
         generateCertificateFiles(configPath,
           {
             organizationName: this.certificate.organizationName || this.$options.CERTIFICATE_PLACEHOLDERS.organizationName,
@@ -203,14 +227,22 @@
           })
           .then(files => {
             this.certificateFiles = files
-            this.snackbarContent = 'Certificate files generated! \nYou must restart the app to apply these changes.'
-            if (confirm('You must restart the app to apply these changes. Do you want to restart the app?')) {
-              this.$electron.remote.app.relaunch()
-              this.$electron.remote.app.exit()
-            }
+            let runningPort = remote.getGlobal('printrz').configuration.port
+            return remote.getGlobal('printrz').restartApi({ port: runningPort })
+          })
+          .then(api => {
+            this.$http.defaults.baseURL = `${api.isHttps ? 'https' : 'http'}://localhost:${api.port}`
+            this.snackbarContent = api.isHttps
+              ? `Certificate generated. Server restarted on HTTPS port ${api.port}.`
+              : `Certificate generated but server failed to switch to HTTPS — still on HTTP port ${api.port}.`
           }).catch(err => {
-            this.snackbarContent = 'An error happened when generating certificate files.'
-            console.log('generateCertificateFiles', err)
+            console.log('generateCertificate', err)
+            const msg = (err && err.message) || ''
+            if (err && (err.code === 'EADDRINUSE' || msg.includes('already in use'))) {
+              this.snackbarContent = `Certificate written, but the port is now busy. Try changing the port in Server configuration.`
+            } else {
+              this.snackbarContent = `An error happened when generating certificate files: ${msg || 'unknown error'}`
+            }
           })
       }
     }
@@ -220,5 +252,29 @@
 <style scoped lang="scss">
   .md-card {
     margin-bottom: 12px;
+  }
+
+  .cert-paths {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 0;
+    p {
+      text-align: left;
+      margin: 4px 0;
+      font-size: 13px;
+      word-break: break-all;
+    }
+    .cert-paths__label {
+      display: inline-block;
+      width: 90px;
+      color: rgba(0, 0, 0, 0.54);
+    }
+    code {
+      background: rgba(0, 0, 0, 0.04);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+    }
   }
 </style>

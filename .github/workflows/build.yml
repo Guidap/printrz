@@ -1,0 +1,93 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+jobs:
+  build:
+    name: ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: macOS Intel (x64)
+            os: macos-15-intel
+            arch: x64
+            args: --macos --x64
+          - label: macOS Apple Silicon (arm64)
+            os: macos-14
+            arch: arm64
+            args: --macos --arm64
+          - label: Windows (x64)
+            os: windows-latest
+            arch: x64
+            args: --win
+          - label: Linux (x64)
+            os: ubuntu-latest
+            arch: x64
+            args: --linux
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Ensure Yarn is available
+        shell: bash
+        run: |
+          if ! command -v yarn >/dev/null 2>&1; then
+            npm install -g yarn@1
+          fi
+          yarn --version
+
+      - name: Install Linux build dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcups2-dev
+
+      - name: Install dependencies
+        run: yarn install --network-timeout 600000
+
+      - name: Build (and publish on release)
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            yarn build ${{ matrix.args }} --publish always
+          else
+            yarn build ${{ matrix.args }}
+          fi
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: printrz-${{ runner.os }}-${{ matrix.arch }}
+          path: |
+            build/*.dmg
+            build/*.zip
+            build/*.exe
+            build/*.AppImage
+            build/*.deb
+            build/*.tar.xz
+            build/latest*.yml
+            build/*.blockmap
+          if-no-files-found: warn
+          retention-days: 14
