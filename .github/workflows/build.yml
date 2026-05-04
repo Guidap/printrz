@@ -3,10 +3,14 @@ name: Build
 on:
   push:
     branches: [master]
-    tags: ['*']
   pull_request:
     branches: [master]
+  release:
+    types: [published]
   workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   build:
@@ -41,7 +45,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+
+      - name: Ensure Yarn is available
+        shell: bash
+        run: |
+          if ! command -v yarn >/dev/null 2>&1; then
+            npm install -g yarn@1
+          fi
+          yarn --version
 
       - name: Install Linux build dependencies
         if: matrix.os == 'ubuntu-latest'
@@ -52,13 +64,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --network-timeout 600000
 
-      - name: Build (and publish on tag)
+      - name: Build (and publish on release)
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+          if [[ "${{ github.event_name }}" == "release" ]]; then
             yarn build ${{ matrix.args }} --publish always
           else
             yarn build ${{ matrix.args }}
