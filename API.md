@@ -5,7 +5,7 @@ Printrz exposes a small HTTP/HTTPS server on `localhost` that any web app can us
 ## Overview
 
 | | |
-|---|---|
+| --- | --- |
 | **Host** | `localhost` (bind on all interfaces of the machine running Printrz) |
 | **Port** | configurable in **Settings → Server configuration** (default: `5001`) |
 | **Protocol** | `https` if a certificate has been generated, `http` otherwise |
@@ -85,7 +85,7 @@ Send a print job to a specific printer.
 **Request body** — `application/json`:
 
 | Field | Type | Required | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `printer` | `string` | yes | The printer `name` returned by `GET /printers`. |
 | `type` | `string` | yes | Job format. Common values: `RAW` (raw bytes, e.g. ESC/POS commands), `TEXT` (plain text), `PDF`, `JPEG`, `COMMAND`. The list of supported types depends on the OS — see [`node-printer` docs](https://github.com/tojocky/node-printer). |
 | `data` | `string` | yes | The payload to print. For `RAW`, the raw bytes encoded as a string (each character is one byte — use `\x..` escapes for non-printable bytes). For `PDF` / `JPEG`, the file content as a base64 string is supported on most platforms. |
